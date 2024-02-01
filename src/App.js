@@ -6,6 +6,16 @@ import TaskModal from './components/TaskModal';
 import './App.css';
 
 const App = () => {
+
+    const [fontClass, setFontClass] = useState('sixtyfour');
+    const fontClasses = ['sixtyfour', 'honk', 'nunito']; // Array of font classes
+    const changeFont = () => {
+        const currentIndex = fontClasses.indexOf(fontClass);
+        const nextIndex = (currentIndex + 1) % fontClasses.length;
+        setFontClass(fontClasses[nextIndex]);
+    };
+
+
   const [tasks, setTasks] = useState([]); // Initial tasks state
   const [showModal, setShowModal] = useState(false); // Modal visibility state
 
@@ -42,12 +52,13 @@ const App = () => {
   return (
       <div className = "App">
         <div className = "logo honk-button">Pomodoro</div>
-        <TimerDisplay timeLeft={formattedTime} />
+        <TimerDisplay timeLeft={formattedTime} fontClass={fontClass} />
         <div className = "button-container">
         <StartStopButton isRunning={isRunning} handleStartStop={handleStartStop} />
         <button className = "task-button roboto-bold" onClick={handleShowModal}>Add Tasks</button>
         </div>
         {showModal && <TaskModal tasks={tasks} onAddTask={addTask} onClose={handleCloseModal} />}
+        <button className = "timer-theme-button"  onClick={changeFont}>Timer Theme</button>
       </div>
   );
 }
