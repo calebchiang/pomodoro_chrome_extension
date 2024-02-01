@@ -4,7 +4,7 @@ import '../styles/StartStopButton.css';
 const StartStopButton = ({ isRunning, handleStartStop }) => {
     return (
 
-        <button className = "button nunito" onClick={handleStartStop}>
+        <button className="button roboto-bold" onClick={handleStartStop}>
             {isRunning ? 'Stop' : "Start"}
         </button>
     );
