@@ -1,8 +1,10 @@
 import React from 'react';
+import '../styles/TimerDisplay.css';
+
 
 const TimerDisplay = ({ timeLeft }) => {
     return (
-        <div>
+        <div className = "timerDisplay sixtyfour">
             {timeLeft}
         </div>
     );

@@ -1,0 +1,15 @@
+.timerDisplay {
+    font-size: 2rem;
+    text-align: center;
+}
+
+/* SixtyFour: CSS class for a variable style */
+.sixtyfour {
+    font-family: "Sixtyfour", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+    font-variation-settings:
+            "BLED" 0,
+            "SCAN" 0;
+}

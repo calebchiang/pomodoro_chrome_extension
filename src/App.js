@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TimerDisplay from './components/TimerDisplay';
 import StartStopButton from './components/StartStopButton';
+import './App.css';
 
 const App = () => {
   const [isRunning, setIsRunning] = useState(false);
@@ -28,7 +29,8 @@ const App = () => {
   const formattedTime = `${Math.floor(timeLeft / 60)}:${('0' + (timeLeft % 60)).slice(-2)}`;
 
   return (
-      <div>
+      <div className = "App">
+        <div className = "logo honk-button">Pomodoro</div>
         <TimerDisplay timeLeft={formattedTime} />
         <StartStopButton isRunning={isRunning} handleStartStop={handleStartStop} />
       </div>
