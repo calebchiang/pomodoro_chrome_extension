@@ -1,3 +1,39 @@
+@keyframes fadeBackground {
+  0% {
+    background-image: linear-gradient(orange, white);
+  }
+  10% {
+    background-image: linear-gradient(#ff8000, orange, white);
+  }
+  20% {
+    background-image: linear-gradient(#ff6600, #ff8000, white);
+  }
+  30% {
+    background-image: linear-gradient(#ff4d00, #ff6600, white);
+  }
+  40% {
+    background-image: linear-gradient(#ff3300, #ff4d00, white);
+  }
+  50% {
+    background-image: linear-gradient(#ff1a00, #ff3300, white);
+  }
+  60% {
+    background-image: linear-gradient(#ff0000, #ff1a00, white);
+  }
+  70% {
+    background-image: linear-gradient(#e60000, #ff0000, white);
+  }
+  80% {
+    background-image: linear-gradient(#cc0000, #e60000, white);
+  }
+  90% {
+    background-image: linear-gradient(#b30000, #cc0000, white);
+  }
+  100% {
+    background-image: linear-gradient(red, white);
+  }
+}
+
 .App {
   width: 300px;
   height: 350px;
@@ -6,7 +42,12 @@
   align-items: center;
   justify-content: center;
   background-image: linear-gradient(orange, white);
+  position:relative;
+  transition: background-color 2s ease;
+
 }
+
+
 
 .logo {
   font-family: 'Roboto', sans-serif;
@@ -14,6 +55,12 @@
   font-weight: bold;
   text-align: center;
   margin-bottom: 100px;
+  transition: opacity 2s ease-in-out; /* Transition for the fade effect */
+  opacity: 1;
+}
+
+.hide-logo{
+  opacity:0;
 }
 
 /* Honk: CSS class for a variable style */
@@ -37,36 +84,55 @@
   border: none;
   color: #fff;
   background-image: linear-gradient(30deg, grey, white);
-  border-radius: 30px;
   background-size: 100% auto;
   font-size: 14px;
   padding: 0.4em 1em;
+  border-radius: 10px;
 }
 
-.timer-theme-button {
-  font-size: 14px;
-  padding: 1em 3.3em;
+.timer-theme-button{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.timer-container, .button-container {
+  transition: transform 1s ease-out;
+
+}
+
+.session-mode{
+  transform: translateY(-100px);
+}
+
+.session-background{
+  animation: fadeBackground 1s ease-in-out forwards;
+}
+
+.change-timer-btn {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  background: transparent; /* Makes the button background transparent */
+  border: none; /* Removes the border */
+  color: #000; /* Set the text color as needed */
   cursor: pointer;
-  transform: perspective(200px) rotateX(15deg);
-  color: white;
-  font-weight: 900;
-  border: none;
-  border-radius: 5px;
-  background: linear-gradient(
-          0deg,
-          rgba(63, 94, 251, 1) 0%,
-          rgba(70, 135, 252, 1) 100%
-  );
-  box-shadow: rgba(63, 94, 251, 0.2) 0px 40px 29px 0px;
-  will-change: transform;
-  transition: all 0.3s;
-  border-bottom: 2px solid rgba(70, 135, 252, 1);
 }
 
-.timer-theme-button:hover {
-  transform: perspective(180px) rotateX(30deg) translateY(2px);
+.task-display-container {
+  width: 100%; /* Take the full width of the App container */
+  /* Adjust the height as needed to create space and push content upward */
+  height: 100px; /* Example height */
+  /* Add padding, background, etc., as desired for your task display area */
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 30px;
 }
 
-.timer-theme-button:active {
-  transform: perspective(170px) rotateX(36deg) translateY(5px);
+.task-item {
+  /* Add styles for individual task items here */
+  padding: 5px;
+  margin: 5px 0;
+  border: 1px solid #ccc; /* Example border */
+  border-radius: 4px; /* Rounded corners for task items */
 }

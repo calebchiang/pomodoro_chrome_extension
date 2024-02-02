@@ -1,14 +1,14 @@
-button {
+.start-button {
     border: none;
     color: #fff;
     background-image: linear-gradient(30deg, #0400ff, #4ce3f7);
-    border-radius: 30px;
     background-size: 100% auto;
     font-size: 14px;
     padding: 0.4em 1em;
+    border-radius: 10px;
 }
 
-button:hover {
+.start-button:hover {
     background-position: right center;
     background-size: 200% auto;
     -webkit-animation: pulse 2s infinite;
