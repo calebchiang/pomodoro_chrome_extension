@@ -48,19 +48,15 @@
 }
 
 
-
 .logo {
   font-family: 'Roboto', sans-serif;
   font-size: 24px;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 100px;
+  margin-bottom: 20px;
   transition: opacity 2s ease-in-out; /* Transition for the fade effect */
   opacity: 1;
-}
 
-.hide-logo{
-  opacity:0;
 }
 
 /* Honk: CSS class for a variable style */
@@ -96,13 +92,30 @@
   right: 10px;
 }
 
-.timer-container, .button-container {
-  transition: transform 1s ease-out;
-
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1); /* Return to normal after pulsing */
+  }
+  50% {
+    transform: scale(1.05); /* Pulse effect */
+  }
 }
 
-.session-mode{
-  transform: translateY(-100px);
+@keyframes moveToTop {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%); /* Or whatever value moves them to the desired position */
+  }
+}
+
+.timer-container{
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.session-mode{ /* Move both timer and buttons */
+  animation: moveToTop 2s forwards;
 }
 
 .session-background{
@@ -119,15 +132,6 @@
   cursor: pointer;
 }
 
-.task-display-container {
-  width: 100%; /* Take the full width of the App container */
-  /* Adjust the height as needed to create space and push content upward */
-  height: 100px; /* Example height */
-  /* Add padding, background, etc., as desired for your task display area */
-  padding: 10px;
-  box-sizing: border-box;
-  margin-bottom: 30px;
-}
 
 .task-item {
   /* Add styles for individual task items here */
@@ -135,4 +139,28 @@
   margin: 5px 0;
   border: 1px solid #ccc; /* Example border */
   border-radius: 4px; /* Rounded corners for task items */
+}
+
+.timer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 50%; /* Optional: if you want the timer to be in a circle */
+  width: 100px; /* Or adjust to fit the size of your timer display */
+  height: 100px; /* Match width for a perfect circle */
+  background-image: linear-gradient(white,lightgrey);
+}
+
+@keyframes cooldownBackground {
+  from {
+    background-image: linear-gradient(red, white); /* Starting session gradient */
+  }
+  to {
+    background-image: linear-gradient(lightblue, white); /* Cooldown session gradient */
+  }
+}
+
+.cooldown-background {
+  animation: cooldownBackground 1s ease-in-out forwards;
 }

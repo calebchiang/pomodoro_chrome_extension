@@ -2,58 +2,82 @@ import React, { useState, useEffect } from 'react';
 import TimerDisplay from './components/TimerDisplay';
 import StartStopButton from './components/StartStopButton';
 import TaskModal from './components/TaskModal';
-
 import './App.css';
 
+// Main App component
 const App = () => {
+    // State for tracking timer status, time left, tasks, modal visibility, session status, and font class
     const [isRunning, setIsRunning] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes
-    const [tasks, setTasks] = useState([]); // Initial tasks state
-    const [showModal, setShowModal] = useState(false); // Modal visibility state
-    const [inSession, setInSession] = useState(false); // Manage session view
-    const [fontClass, setFontClass] = useState('sixtyfour');
-    const fontClasses = ['sixtyfour', 'honk', 'nunito', ]; // Array of font classes
+    const [timeLeft, setTimeLeft] = useState(25 * 60); // Timer starts at 25 minutes
+    const [tasks, setTasks] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [inSession, setInSession] = useState(false);
+    const [isCooldown, setIsCooldown] = useState(false);
+    const [fontClass, setFontClass] = useState('roboto-condensed'); // Initial font class for timer
+    const fontClasses = ['roboto-condensed', 'sixtyfour', 'honk', 'nunito']; // Font class options for the timer
 
+    // Function to cycle through available fonts
     const changeFont = () => {
         const currentIndex = fontClasses.indexOf(fontClass);
         const nextIndex = (currentIndex + 1) % fontClasses.length;
         setFontClass(fontClasses[nextIndex]);
     };
 
+    // Function to add a new task
     const addTask = (taskName) => {
-        const newTask = {name: taskName, completed: false};
+        const newTask = { name: taskName, completed: false };
         setTasks([...tasks, newTask]);
     };
 
+    // Functions to handle modal visibility
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 
+    // Effect hook to handle timer functionality
     useEffect(() => {
         let interval = null;
 
         if (isRunning) {
             interval = setInterval(() => {
-                setTimeLeft(prevTime => prevTime > 0 ? prevTime - 1 : 0);
+                setTimeLeft(prevTime => prevTime - 1);
+                if (timeLeft === 1) { // Transition to cooldown when time runs out
+                    setIsCooldown(true);
+                    setIsRunning(false); // Optionally stop the running state
+                    setInSession(false); // Make sure session is marked as ended
+                    setTimeLeft(5 * 60); // 5 minutes for cooldown
+                }
             }, 1000);
-            setInSession(true); // Transition to session view when timer starts
-        } else {
-            clearInterval(interval);
-            if (timeLeft <= 0) {
-                setInSession(false); // Exit session view when timer stops and is complete
-            }
+        } else if (isCooldown && timeLeft === 0) {
+            // Handle end of cooldown
+            setIsCooldown(false);
+            // Here you might want to reset for a new session or handle end state
         }
 
         return () => clearInterval(interval);
-    }, [isRunning, timeLeft]);
+    }, [isRunning, timeLeft, isCooldown]);
 
+    // Function to start/stop the timer
     const handleStartStop = () => {
-        setIsRunning(!isRunning);
+        if (!isRunning && !isCooldown) { // Start the session if not running and not in cooldown
+            setIsRunning(true);
+            setInSession(true);
+            setIsCooldown(false); // Make sure cooldown is not active
+            setTimeLeft(25 * 60); // Reset timer for 25 minutes
+        } else {
+            // Stop the session or cooldown
+            setIsRunning(false);
+            setInSession(false);
+            setIsCooldown(false); // Ensure cooldown is deactivated if stopping early
+            // Consider resetting timeLeft or handling state appropriately
+        }
     };
 
+    // Format the remaining time for display
     const formattedTime = `${Math.floor(timeLeft / 60)}:${('0' + (timeLeft % 60)).slice(-2)}`;
 
+    // JSX for the App component
     return (
-        <div className={`App ${inSession ? 'session-background' : ''}`}>
+        <div className={`App ${inSession ? 'session-background' : ''} ${isCooldown ? 'cooldown-background' : ''}`}>
             {!inSession && (
                 <div className={`logo honk-button ${inSession ? 'hide-logo' : ''}`}>
                     Pomo
@@ -64,27 +88,13 @@ const App = () => {
                 <TimerDisplay timeLeft={formattedTime} fontClass={fontClass} />
             </div>
 
-            {/* Always visible button container */}
             <div className={`button-container ${inSession ? 'session-mode' : ''}`}>
                 <StartStopButton isRunning={isRunning} handleStartStop={handleStartStop} />
                 <button className="task-button roboto-bold" onClick={handleShowModal}>Add Tasks</button>
             </div>
 
-            {/* New task display container */}
-            <div className="task-display-container">
-                <h2 className="task-list-heading">Current Tasks:</h2>
-                {/* Map through tasks and display them here */}
-                {tasks.map((task, index) => (
-                    <div key={index} className="task-item">
-                        {task.name} {/* Add checkboxes or other task-related UI here */}
-                    </div>
-                ))}
-            </div>
-
-
             {showModal && <TaskModal tasks={tasks} onAddTask={addTask} onClose={handleCloseModal} />}
 
-            {/* Session-specific content (like tasks list) goes here, if needed */}
             <button className="change-timer-btn play-regular" onClick={changeFont}>[ change timer ]</button>
         </div>
     );
